@@ -1,0 +1,56 @@
+## grafana image version
+image:
+  repo: "prominentedgestatengine/grafana"
+  tag: "HEAD-45ca804-tools"
+  pullPolicy: Always
+
+external_storage:
+  aws_access_key: "REDAC"
+  aws_secret_key: "REDAC"
+
+  region: us-east-2
+
+  storage_bucket: "prominentedge-devops"
+
+config:
+  http:
+    bind_address: 3000
+  storage_directory: /var/lib/grafana
+
+# For grafana login
+admin_password: "asdfoias"
+
+mysql:
+  mysql_url: "mysql.prominentedge.com"
+  mysql_user: "admin"
+  mysql_password: "alsdfj"
+
+external_snapshot_url: "http://grafana.prominentedge.com"
+
+service:
+  ## Add annotations to service
+  # annotations: {}
+  type: NodePort
+
+## Persist data to a persistent volume
+##
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  size: 150Gi
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+  requests:
+    memory: 256Mi
+    cpu: 0.1
+  limits:
+    memory: 16Gi
+    cpu: 8
+
+## Node labels for pod assignment
+## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+##
+nodeSelector: {}
+

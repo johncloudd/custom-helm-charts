@@ -1,0 +1,10 @@
+name: grafana
+version: 0.6.1
+description: Scalable datastore for metrics, events, and real-time analytics.
+home: https://grafana.com/
+sources:
+- https://github.com/grafana/grafana
+maintainers:
+- name: John Knepper
+  email: devops@prominentedge.com
+engine: gotpl
