@@ -1,6 +1,6 @@
 name: grafana
 version: 0.6.1
-description: Scalable datastore for metrics, events, and real-time analytics.
+description: Grafana UI
 home: https://grafana.com/
 sources:
 - https://github.com/grafana/grafana
