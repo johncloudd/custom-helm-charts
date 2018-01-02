@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "mediawiki.fullname" . }}
+  labels:
+    app: {{ template "mediawiki.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+{{- if eq .Values.ExternalDns true }}
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.hostname }}.
+{{- end }}
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+{{- if eq .Values.IsLbInternal true }}
+    service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+{{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.externalPort }}
+      targetPort: {{ .Values.service.internalPort }}
+      protocol: TCP
+      name: {{ .Values.service.name }}
+  selector:
+    app: {{ template "mediawiki.name" . }}
+    release: {{ .Release.Name }}
