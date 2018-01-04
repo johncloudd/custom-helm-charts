@@ -1,0 +1,66 @@
+apiVersion: apps/v1beta2
+kind: DaemonSet
+metadata:
+  name: {{ template "cadvisor.fullname" . }}
+  labels:
+    app: {{ template "cadvisor.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "cadvisor.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "cadvisor.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - "-storage_driver_host={{ .Values.influx.host }}:{{ .Values.influx.port}}"
+            - "-storage_driver=influxdb"
+            - "-storage_driver_db={{ .Values.influx.db }}"
+            - "-storage_driver_influxdb_retention_policy={{ .Values.influx.retention_policy }}"
+            - "-storage_driver_user={{ .Values.influx.user }}"
+            - "-storage_driver_password={{ .Values.influx.password }}"
+          ports:
+            - containerPort: {{ .Values.service.internalPort }}
+          volumeMounts:
+          - mountPath: /rootfs
+            name: rootfs
+          - mountPath: /var/run
+            name: run
+          - mountPath: /sys
+            name: sys
+          - mountPath: /var/lib/docker
+            name: docker
+          - mountPath: /dev/disk
+            name: disk
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+      volumes:
+      - name: rootfs
+        hostPath:
+          path: /
+          type: Directory
+      - name: run
+        hostPath:
+          path: /var/run
+          type: Directory
+      - name: sys
+        hostPath:
+          path: /sys
+          type: Directory
+      - name: docker
+        hostPath:
+          path: /var/lib/docker/
+          type: Directory
+      - name: disk
+        hostPath:
+          path: /dev/disk/
+          type: Directory
