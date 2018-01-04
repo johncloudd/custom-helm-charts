@@ -13,6 +13,7 @@ package:
 install: delete
 	helm install --name cadvisor \
 	-f values.yaml \
+	--namespace kube-system \
 	${WORKSPACE}/cadvisor-0.1.0.tgz
 
 delete:
