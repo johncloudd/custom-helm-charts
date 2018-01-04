@@ -2,10 +2,7 @@
 
 WORKSPACE ?= $(shell pwd)
 
-deploy: client package install
-
-client:
-	helm init --client-only
+deploy: package install
 
 package:
 	helm package -d ./ ${WORKSPACE}/cadvisor
