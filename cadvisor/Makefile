@@ -8,7 +8,7 @@ client:
 	helm init --client-only
 
 package:
-	helm package -d ./ ${WORKSPACE}/
+	helm package -d ./ ${WORKSPACE}/cadvisor
 
 install: delete
 	helm install --name cadvisor \
