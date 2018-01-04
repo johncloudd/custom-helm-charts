@@ -17,7 +17,6 @@ spec:
         app: {{ template "cadvisor.name" . }}
         release: {{ .Release.Name }}
     spec:
-      serviceAccountName: cadvisor
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
