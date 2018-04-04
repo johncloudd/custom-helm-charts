@@ -41,6 +41,8 @@ data:
     ## The URL path to static resources (images, scripts, etc.)
     $wgResourceBasePath = $wgScriptPath;
     
+    $wgUploadDirectory = "/var/www/data/images";
+
     ## The URL path to the logo.  Make sure you change this from the default,
     ## or else you'll overwrite your logo when you upgrade!
     $wgLogo = "{$wgUploadDirectory}/pe-logo.png";
@@ -64,7 +66,6 @@ data:
     $wgDBuser = "";
     $wgDBpassword = "";
     
-    $wgUploadDirectory = "/var/www/data/images";
 
     # SQLite-specific settings
     $wgSQLiteDataDir = "/var/www/data";
