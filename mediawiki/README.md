@@ -12,6 +12,8 @@
   `aws ec2 create-volume --availability-zone=us-east-2c --size=500 --volume-type=gp2 --profile pe`
 * Be sure your IAM role that is attached to your instance(s) has permissions to attach EC2 volumes.
 * Now, specify the outputted volume-id in the `values.yaml` file.
+* Create your PVCs; This requires a persistent volume claim  - examples are in this directory.
+* *NOTE* - One PVC is expected to be named mediawiki.
 
 * If you are using external-dns, specify the hostname and set the external dns var to true:
 ```
@@ -33,10 +35,4 @@ kubectl exec -it <pod-name> /bin/bash
 chmod -R 755 /var/www/data
 chown www-data:www-data /var/www/data 
 ```
-
-## Custom Setup:
-* Visit the url you specified for `hostname`.  Follow the setup instructions for your DB preference, and the following carefully:
-  * Once you have created and downloaded your `LocalSettings.php` file, add it to the `/var/www/html/`
-    directory in your pod's filesystem (Eg. you can do this using `kubectl exec -it <pod-name>`).
-  * Refresh your browser, and your wiki should be ready to go.
 
