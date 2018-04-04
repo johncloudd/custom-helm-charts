@@ -64,6 +64,8 @@ data:
     $wgDBuser = "";
     $wgDBpassword = "";
     
+    $wgUploadDirectory = "/var/www/data/images";
+
     # SQLite-specific settings
     $wgSQLiteDataDir = "/var/www/data";
     $wgObjectCaches[CACHE_DB] = [
