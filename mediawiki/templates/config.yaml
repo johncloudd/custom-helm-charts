@@ -25,6 +25,8 @@ data:
     ## Uncomment this to disable output compression
     # $wgDisableOutputCompression = true;
 
+    $wgHashedUploadDirectory = false;
+
     $wgAllowExternalImages = true;
     
     $wgSitename = "{{ .Values.sitename }}";
@@ -43,7 +45,7 @@ data:
     ## The URL path to static resources (images, scripts, etc.)
     $wgResourceBasePath = $wgScriptPath;
     
-    $wgUploadDirectory = "/var/www/data/images";
+    #$wgUploadDirectory = "/var/www/data/images";
 
     ## The URL path to the logo.  Make sure you change this from the default,
     ## or else you'll overwrite your logo when you upgrade!
