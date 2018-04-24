@@ -45,6 +45,9 @@ Persistence:
   Name: owasp-zap
   StorageClass: owasp-zap
   Enabled: false
+  AccessMode: ReadWriteOnce
+  Size: 250Gi
+
 
 nodeSelector:
 #  cluster-type: default
