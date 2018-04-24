@@ -36,7 +36,7 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
-ExternalDns: true
+ExternalDns: false
 hostname: zap.prominentedge.com
 
 ebsVolume: false
@@ -45,5 +45,5 @@ Persistence:
   Name: owasp-zap
 
 nodeSelector:
-  cluster-type: default
+#  cluster-type: default
 
