@@ -43,6 +43,7 @@ ebsVolume: false
 
 Persistence:
   Name: owasp-zap
+  StorageClass: owasp-zap
 
 nodeSelector:
 #  cluster-type: default
