@@ -31,7 +31,7 @@ spec:
               path: /
               port: {{ .Values.service.internalPort }}
           volumeMounts:
-          - mountPath: ~/.ZAP/session/
+          - mountPath: /home/zap/.ZAP/session/
             name: {{ .Values.Persistence.Name }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
