@@ -1,4 +1,4 @@
-{{- if and .Values.Persistence.Enabled (not .Values.Persistence.ExistingClaim) -}} 
+{{- if .Values.Persistence.Enabled }} 
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
