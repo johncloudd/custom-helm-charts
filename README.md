@@ -1,5 +1,12 @@
 # custom-helm-charts
 
+# Table of Contents
+
+   * [custom-helm-charts](#custom-helm-charts)
+      * [Setup](#setup)
+      * [MEDIAWIKI](#mediawiki)
+      * [OWASP-ZAP](#owasp-zap)
+
 ## Setup
 
 * Install Helm
@@ -19,3 +26,8 @@
   `minikube service zap-owasp-zap`
 
 
+  - ZAP Resources:
+    * [Downloads](https://github.com/zaproxy/zaproxy/wiki/Downloads).
+    * [ZAP-CLI](https://github.com/zaproxy/zaproxy/wiki/Docker#zap-cli).
+    * [WebSwing](https://github.com/zaproxy/zaproxy/wiki/WebSwing).
+    * [ZAP Project Home](https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project).

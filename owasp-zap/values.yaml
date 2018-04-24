@@ -38,3 +38,12 @@ resources: {}
 
 ExternalDns: true
 hostname: zap.prominentedge.com
+
+ebsVolume: false
+
+Persistence:
+  Name: owasp-zap
+
+nodeSelector:
+  cluster-type: default
+

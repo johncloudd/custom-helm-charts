@@ -30,9 +30,20 @@ spec:
             httpGet:
               path: /
               port: {{ .Values.service.internalPort }}
+          volumeMounts:
+          - mountPath: ~/.ZAP/session/
+            name: data
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
+      volumes:
+      - name: 
+    {{- if .Values.ebsVolume }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.Persistence.Name }}
+    {{- else }}
+        emptyDir: {}
     {{- end }}
