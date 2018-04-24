@@ -40,7 +40,7 @@ spec:
 {{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
       volumes:
-      - name: 
+      - name: {{ .Values.Persistence.Name }}
     {{- if .Values.ebsVolume }}
         persistentVolumeClaim:
           claimName: {{ .Values.Persistence.Name }}
