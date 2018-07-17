@@ -145,7 +145,7 @@ data:
     #wfLoadSkin( 'CologneBlue' );
     #wfLoadSkin( 'Modern' );
     #wfLoadSkin( 'MonoBook' );
-    #wfLoadSkin( 'Vector' );
+    wfLoadSkin( 'Vector' );
     
     
     # End of automatically generated settings.
