@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: logstash-service
+  labels:
+    app: logstash
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+  {{- range $port := .Values.logstash_service.logstash_ports }}
+    - name: {{ $port.name }}
+      port: {{ $port.containerPort }}
+      protocol: {{ $port.protocol }}
+      targetPort: {{ $port.containerPort }}
+  {{- end }}
+  selector:
+    app: logstash
+    release: {{ .Release.Name }}

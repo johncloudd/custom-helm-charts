@@ -1,0 +1,106 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+  labels:
+    app: {{ template "elasticsearch.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: "{{ .Values.client.name }}"
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  name: {{ template "elasticsearch.client.fullname" . }}
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  replicas: {{ .Values.client.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "elasticsearch.name" . }}
+        component: "{{ .Values.client.name }}"
+        release: {{ .Release.Name }}
+    spec:
+      serviceAccountName: es-service-account
+      initContainers:
+      # see https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html
+      # and https://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration-memory.html#mlockall
+      - name: "sysctl"
+        image: "busybox"
+        imagePullPolicy: "Always"
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true
+      imagePullSecrets:
+        - name: registrykey
+      containers:
+      - name: elasticsearch
+        env:
+        - name: SERVICE
+          value: elasticsearch-master-svc-{{ .Values.environment }}
+        - name: KUBERNETES_MASTER
+          value:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: NODE_DATA
+          value: "false"
+{{- if hasPrefix "5." .Values.appVersion }}
+        - name: NODE_INGEST
+          value: "false"
+{{- end }}
+        - name: NODE_MASTER
+          value: "false"
+        - name: PROCESSORS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        - name: ES_JAVA_OPTS
+          value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.client.heapSize }} -Xmx{{ .Values.client.heapSize }}"
+        {{- range $key, $value :=  .Values.cluster.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.client.resources | indent 12 }}
+        #readinessProbe:
+        #  httpGet:
+        #    path: /_cluster/health?wait_for_status=yellow
+        #    port: 9200
+        #    httpHeaders:
+        #      - name: Authorization
+        #        value: Basic {{.Values.base64_auth}}
+        #  initialDelaySeconds: 5
+        #livenessProbe:
+        #  httpGet:
+        #    path: /_cluster/health?wait_for_status=yellow
+        #    port: 9200
+        #    httpHeaders:
+        #      - name: Authorization
+        #        value: Basic {{.Values.base64_auth}}
+        #  initialDelaySeconds: 90
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        ports:
+        - containerPort: 9200
+          name: http
+        - containerPort: 9300
+          name: transport
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          name: config
+          subPath: elasticsearch.yml
+        - mountPath: /usr/share/elasticsearch/config/readonlyrest.yml
+          name: config
+          subPath: readonlyrest.yml
+        - mountPath: /usr/share/elasticsearch/config/logging.yml
+          name: config
+          subPath: logging.yml
+      volumes:
+      - name: config
+        configMap:
+          name: es-configmap

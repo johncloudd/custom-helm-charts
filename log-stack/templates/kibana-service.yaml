@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: {{ template "kibana.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  name: kibana-service-log-stack
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.kibana_service.kibana_externalPort }}
+      targetPort: {{ .Values.kibana_service.kibana_internalPort }}
+      protocol: TCP
+{{- if .Values.kibana_service.kibana_externalIPs }}
+  externalIPs:
+{{ toYaml .Values.kibana_service.kibana_externalIPs | indent 4 }}
+{{- end }}
+  selector:
+    app: {{ template "kibana.name" . }}
+    release: {{ .Release.Name }}

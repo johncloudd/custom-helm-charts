@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{template "elasticsearch.fullname" . }}-lb
+  labels:
+    app: {{ template "elasticsearch.fullname" . }}
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+spec:
+  ports:
+    - port: 80
+      name: http
+      targetPort: 9200
+  selector:
+    component: "{{ .Values.client.name }}"
+  type: ClusterIP
