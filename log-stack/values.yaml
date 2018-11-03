@@ -203,7 +203,7 @@ logstash_inputs:
       }   
       elasticsearch {
         hosts => "http://elasticsearch-client-svc-tools.default.svc.cluster.local:9200"
-        index => "filebeat-*"
+        index => "filebeat-6.2.3*"
         tags => ["filebeat"]
         schedule => "* * * * *"
       }   
